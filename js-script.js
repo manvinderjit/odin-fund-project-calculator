@@ -1,3 +1,8 @@
+let displayData = "";
+
+let displayVariable;
+let newVariable;
+
 const add = function(a, b) {
 	return a+b;
 };
@@ -29,8 +34,26 @@ const operate = function (operator, a, b) {
     }
 }
 
-function generateDigitButtons(){
-    
+const divDisplay = document.querySelector("#calc-display");
+
+const populateDisplay = function (newDisplayData) {
+    if(displayData.length>15){
+        alert("Maximum Calculation Limit Exceeded")
+        return;
+    }
+    displayData += newDisplayData;    
+    divDisplay.innerHTML = displayData;    
 }
 
-const divContainerDigits = document.querySelector('#calc-digits');
+const numberButtons = document.querySelectorAll(".number-button");
+numberButtons.forEach((numberButton) => {
+    numberButton.addEventListener('click', () => {        
+        populateDisplay(numberButton.id);
+    })
+})
+
+const clearButton = document.querySelector("#clear");
+clearButton.addEventListener('click', () => {
+    displayData = "";
+    populateDisplay('');
+})
