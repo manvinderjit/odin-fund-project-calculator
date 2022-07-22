@@ -28,3 +28,9 @@ const operate = function (operator, a, b) {
         return divide(a, b);
     }
 }
+
+function generateDigitButtons(){
+    
+}
+
+const divContainerDigits = document.querySelector('#calc-digits');
