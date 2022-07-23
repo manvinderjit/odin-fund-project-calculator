@@ -1,13 +1,14 @@
 let displayData = "0";
 let operatorChosen = null;
 let firstNumber = null;
+let operationExecuted = false;
 
 const add = function(a, b) {
-	return a+b;
+	return Math.round((a+b) * 10000) / 10000;
 };
 
 const subtract = function(a, b) {
-    return a-b;	
+    return Math.round((a-b) * 10000) / 10000;	
 };
 
 const multiply = function(a, b) {  
@@ -58,7 +59,11 @@ numberButtons.forEach((numberButton) => {
         if(operatorChosen === "/" && numberButton.id === "0"){
             alert("Can not divide by zero!");
             return
-        }        
+        }
+        if(operationExecuted === true){
+            displayData = "";
+            operationExecuted = false;
+        }
         populateDisplay(numberButton.id);           
     })
 })
@@ -76,7 +81,7 @@ const clearEverything = function (){
 }
 
 window.onload = function () {
-    clearEverything();    
+    clearEverything();
 }
 
 const operatorButtons = document.querySelectorAll(".operator-button");
@@ -105,6 +110,7 @@ executionButton.addEventListener('click' , () => {
     }
     let temp = operate(operatorChosen, firstNumber, displayData);
     operatorChosen = null;
+    operationExecuted = true;
     if(temp === null){
         alert("Can't divide by zero!");
         clearEverything();
