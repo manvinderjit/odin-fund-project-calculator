@@ -1,7 +1,6 @@
-let displayData = "";
-let operatorChosen = "";
+let displayData = "0";
+let operatorChosen = null;
 let firstNumber = null;
-let operationExecuted = false;
 
 const add = function(a, b) {
 	return a+b;
@@ -12,7 +11,7 @@ const subtract = function(a, b) {
 };
 
 const multiply = function(a, b) {  
-    return a * b;
+    return Math.round((a*b) * 10000) / 10000;
 };
 
 const divide = function (a, b) {
@@ -34,7 +33,9 @@ const operate = function (operator, a, b) {
             return null
         }
         return divide(Number(a), Number(b));
-    } 
+    } else{
+        return null;
+    }
 }
 
 const divDisplay = document.querySelector("#calc-display");
@@ -43,7 +44,7 @@ const populateDisplay = function (newDisplayData) {
     if(displayData.length>15){
         alert("Maximum Calculation Limit Exceeded")
         return;
-    }
+    }    
     displayData += newDisplayData;    
     divDisplay.innerHTML = displayData;    
 }
@@ -51,10 +52,13 @@ const populateDisplay = function (newDisplayData) {
 const numberButtons = document.querySelectorAll(".number-button");
 numberButtons.forEach((numberButton) => {
     numberButton.addEventListener('click', () => {    
-        if(operationExecuted === true){
+        if(displayData === "0"){
             displayData = "";
-            operationExecuted = false;
-        }
+        }        
+        if(operatorChosen === "/" && numberButton.id === "0"){
+            alert("Can not divide by zero!");
+            return
+        }        
         populateDisplay(numberButton.id);           
     })
 })
@@ -67,30 +71,30 @@ clearButton.addEventListener('click', () => {
 const clearEverything = function (){
     displayData = "0";
     populateDisplay('');
-    firstNumber = null;
-    operatorChosen = "";
+    firstNumber = null;    
+    operatorChosen = null;
+}
+
+window.onload = function () {
+    clearEverything();    
 }
 
 const operatorButtons = document.querySelectorAll(".operator-button");
 operatorButtons.forEach((operatorButton) => {
-    operatorButton.addEventListener('click', () => {  
-        if(operatorChosen == "/" && Number(displayData) == 0 ){
-            alert("Can not divide by zero!");
-            clearEverything();
-            return
-        }
-        if(firstNumber !== null){                            
-            displayData = operate(operatorChosen, firstNumber, displayData);            
-            operatorChosen = (operatorButton.id);            
-            firstNumber = displayData;                        
-            populateDisplay('');
-            displayData = "";          
-            
-        }else{            
+    operatorButton.addEventListener('click', () => {        
+        if(firstNumber === null){
             firstNumber = displayData;
-            operatorChosen = (operatorButton.id);
-            displayData = "";
-        }        
+        }
+       
+        if(operatorChosen !== null && displayData !== ""){            
+            let temp = operate(operatorChosen, firstNumber, displayData);
+            displayData = temp;
+            populateDisplay('');
+            firstNumber = displayData;
+        }
+        operatorChosen = (operatorButton.id);
+        displayData = "";       
+            
     })
 })
 
@@ -100,6 +104,7 @@ executionButton.addEventListener('click' , () => {
         return
     }
     let temp = operate(operatorChosen, firstNumber, displayData);
+    operatorChosen = null;
     if(temp === null){
         alert("Can't divide by zero!");
         clearEverything();
@@ -107,8 +112,7 @@ executionButton.addEventListener('click' , () => {
     } else{
         displayData = temp
         firstNumber = null;
-        populateDisplay('');     
-        operationExecuted = true;   
+        populateDisplay('');        
     }
     
 })

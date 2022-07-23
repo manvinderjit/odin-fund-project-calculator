@@ -41,3 +41,18 @@ button {
     font-size: 1.5vw;
     font-weight: 500;
 }
+
+.number-button {
+    background-color: lightsteelblue;
+    opacity: 70%;
+}
+.number-button:hover {
+    opacity: 100%;
+} 
+.operator-button {
+    background-color: lightpink;
+    opacity: 70%;
+}
+.operator-button:hover {    
+    opacity: 100%;
+}
